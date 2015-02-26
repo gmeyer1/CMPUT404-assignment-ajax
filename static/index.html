@@ -38,6 +38,8 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
         if (xhr.readyState==4) {
             try {
                 if (xhr.status==200) {
+                	var requestdata = JSON.parse(xhr.responseText);
+                	callback(requestdata); 
                     //XXX: parse some JSON from the request!
                     //XXX: Pass the data to the callback!
                 }
@@ -47,9 +49,15 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
             }
         }
     };
+    
     //XXX: POST to a URL
+    xhr.open("GET", url, true);
     //XXX: set the mimetype and the accept headers!
+    xhr.setRequestHeader('Accept', '*/*');
     // Remember to use application/json !
+    xhr.setRequestHeader('Content-type', 'application/json');
+    //Not sure if these objects are formatted or need to be formatted
+    xhr.send(objects);
 }
 
 
@@ -138,6 +146,7 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //XXX: Send a XHTML Request that updates the entity you just  modified!
+    sendJSONXMLHTTPRequest("/entity/" + entity, data, null); //I think we don't need a callback?  
 
 }
 
@@ -262,6 +271,9 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 
 function update() {
     //XXX: TODO Get the world from the webservice using a XMLHTTPRequest
+    sendJSONXMLHTTPRequest("/world", null, function(responsetest){
+    	world = responsetext;
+    });
     drawFrame();
 }
 
