@@ -74,7 +74,7 @@ function drawCircle(context,entity) {
         var y = entity["y"];
         //moveTo(x,y);
 
-	var grd=createLinearGradient(0,0,1200,0);
+	var grd=createLinearGradient(0,0,W,0);
 	grd.addColorStop(0,"blue");
 	grd.addColorStop(0.5,"red");
 	grd.addColorStop(1,"yellow");
@@ -157,8 +157,7 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //console.log("adding: " + entity + " with data " + data);
-    sendJSONXMLHTTPRequest("/entity/" + entity, data, drawFrame())
-
+    sendJSONXMLHTTPRequest('/entity/' + encodeURIComponent(entity), data, null);
 }
 
 var counter = 0;
@@ -281,13 +280,12 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 
 
 function update() {
-    sendJSONXMLHTTPRequest("/world", null, function(responsetext){
-    	//JSON has already been parsed
-    	console.log(responsetext);
-    	world = responsetext;
-    });
+    function send(responsetext) {
+        world = responsetext;
+    }
     drawNextFrame();
     drawFrame();
+    sendJSONXMLHTTPRequest("/world", null, send) 
 }
 
 // 30 frames per second
