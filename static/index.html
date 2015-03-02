@@ -73,16 +73,25 @@ function drawCircle(context,entity) {
         var x = entity["x"];
         var y = entity["y"];
         //moveTo(x,y);
-        fillStyle = entity["colour"];
-        strokeStyle = fillStyle;
+
+	var grd=createLinearGradient(0,0,1200,0);
+	grd.addColorStop(0,"blue");
+	grd.addColorStop(0.5,"red");
+	grd.addColorStop(1,"yellow");
+
+	fillStyle=grd;
+
+	//fillStyle = entity["colour"];
+	strokeStyle = fillStyle;
         arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
+	fill();
         stroke();                                
     }
 }
 
 function prepEntity(entity) {
     if (!entity["colour"]) {
-        entity["colour"] = "#FF0000";
+        entity["colour"] = "#ff0000";
     }
     if (!entity["radius"]) {
         entity["radius"] = 50;
