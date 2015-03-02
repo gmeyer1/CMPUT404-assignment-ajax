@@ -12,4 +12,10 @@ Contributors / Licensing
 
 Generally everything is LICENSE'D under the Apache 2 license by Abram Hindle.
 
+Contributions from:
+
+Glenn Meyer - gmeyer1
+
+Zak Turchansky - zturchan
+
 
