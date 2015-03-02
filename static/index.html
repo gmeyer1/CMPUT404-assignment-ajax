@@ -157,7 +157,7 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //console.log("adding: " + entity + " with data " + data);
-    sendJSONXMLHTTPRequest("/entity/" + entity, data, drawFrame);
+    sendJSONXMLHTTPRequest('/entity/' + encodeURIComponent(entity), data, null);
 }
 
 var counter = 0;
