@@ -33,7 +33,6 @@ var H = canvas.height = window.innerHeight-50;
 
 
 function sendJSONXMLHTTPRequest(url, objects, callback) {
-	//console.log("about to snes json xmlhttpreq");
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (xhr.readyState==4) {
@@ -57,23 +56,20 @@ function sendJSONXMLHTTPRequest(url, objects, callback) {
     xhr.setRequestHeader('Accept', '*/*');
     // Remember to use application/json !
     xhr.setRequestHeader('Content-Type', 'application/json');
-    //Not sure if these objects are formatted or need to be formatted
     xhr.send(JSON.stringify(objects));
-    //console.log("request sent");
 }
 
 
 world = {};
 
-//XXX: TODO Make this prettier!
 function drawCircle(context,entity) {
     with(context) {
         beginPath();              
         lineWidth = 3;
         var x = entity["x"];
         var y = entity["y"];
-        //moveTo(x,y);
-
+	
+	//Draw a screen-wide gradient for our world
 	var grd=createLinearGradient(0,0,W,0);
 	grd.addColorStop(0,"blue");
 	grd.addColorStop(0.5,"red");
@@ -81,7 +77,6 @@ function drawCircle(context,entity) {
 
 	fillStyle=grd;
 
-	//fillStyle = entity["colour"];
 	strokeStyle = fillStyle;
         arc(x, y, (entity["radius"])?entity["radius"]:50, 0, 2.0 * Math.PI, false);  
 	fill();
@@ -154,15 +149,14 @@ function getPosition(e) {
 
 
 function addEntity(entity, data) {
+	//Add an entity and send it off to our webservice
     world[entity] = data;
-    drawNextFrame(); // (but should we?)
-    //console.log("adding: " + entity + " with data " + data);
+    drawNextFrame();
     sendJSONXMLHTTPRequest('/entity/' + encodeURIComponent(entity), data, null);
 }
 
 var counter = 0;
 function addEntityWithoutName(data) {
-    //var name = "X"+Math.floor((Math.random()*100)+1);
     var name = "X"+(counter++)%100;
     addEntity(name,data);
 }
@@ -280,17 +274,19 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 
 
 function update() {
+	//This function used as a callback for our AJAX request
+	//updates our local world with whatever the webservice gives back to us
     function send(responsetext) {
         world = responsetext;
     }
     drawNextFrame();
     drawFrame();
+    //Get the latest world
     sendJSONXMLHTTPRequest("/world", null, send) 
 }
 
 // 30 frames per second
 setInterval( update, 1000/30.0);
-//setInterval( update, 1000);
 
 
     </script>
