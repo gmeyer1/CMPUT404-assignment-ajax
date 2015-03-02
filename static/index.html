@@ -157,8 +157,7 @@ function addEntity(entity, data) {
     world[entity] = data;
     drawNextFrame(); // (but should we?)
     //console.log("adding: " + entity + " with data " + data);
-    sendJSONXMLHTTPRequest("/entity/" + entity, data, drawFrame())
-
+    sendJSONXMLHTTPRequest("/entity/" + entity, data, drawFrame);
 }
 
 var counter = 0;
@@ -281,13 +280,12 @@ mouse.mousedraggers.push(function(x,y,clicked,e) {
 
 
 function update() {
-    sendJSONXMLHTTPRequest("/world", null, function(responsetext){
-    	//JSON has already been parsed
-    	console.log(responsetext);
-    	world = responsetext;
-    });
+    function send(responsetext) {
+        world = responsetext;
+    }
     drawNextFrame();
     drawFrame();
+    sendJSONXMLHTTPRequest("/world", {}, send) 
 }
 
 // 30 frames per second
